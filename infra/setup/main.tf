@@ -19,7 +19,7 @@ provider "aws" {
   region = "us-west-2"
   default_tags {
     tags = {
-      Environment = teraform.workspace
+      Environment = terraform.workspace
       Project     = var.project
       contact     = var.contact
       ManageBy    = "Terraform/setup"
