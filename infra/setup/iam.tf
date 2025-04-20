@@ -16,7 +16,7 @@ resource "aws_iam_access_key" "cd" {
 ##########################################
 
 # 'data' is information that a resource will use when it is created
-data "aws_iam_policy_document" "tf_backend_policy" {
+data "aws_iam_policy_document" "tf_backend_document" {
   statement {
     effect    = "Allow"
     actions   = ["s3:ListBucket"]
@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "tf_backend_policy" {
     actions = ["s3:GetOjbect", "s3:PutObject", "s3:DeleteObject"]
     resources = [
       "arn:aws:s3:::${var.tf_state_bucket}/tf-state-deploy/*",
-      "arn:aws:s3:::${var.tf_state_bucket}/tf-state-depoly-env/*"
+      "arn:aws:s3:::${var.tf_state_bucket}/tf-state-deploy-env/*"
     ]
   }
 
@@ -40,18 +40,18 @@ data "aws_iam_policy_document" "tf_backend_policy" {
       "dynamodb:PutItem",
       "dynamodb:DeleteItem"
     ]
-    resources = ["arn:aws:dynamodb:*:*table/${var.tf_state_lock_table}"]
+    resources = ["arn:aws:dynamodb:*:*:table/${var.tf_state_lock_table}"]
   }
 }
 
-resource "aws_iam_policy" "tf_backend" {
+resource "aws_iam_policy" "tf_backend_policy" {
   name        = "${aws_iam_user.cd.name}-terraform-s3-dynamodb"
-  description = "Allower user to use S3 and DynamoDB for Terraform resources"
-  policy      = data.aws_iam_policy_document.tf_backend_policy.json
+  description = "Allows user to use S3 and DynamoDB for Terraform resources"
+  policy      = data.aws_iam_policy_document.tf_backend_document.json
 }
 
 # This attaches the policy to the user
-resource "aws_iam_user_policy_attachment" "tf_backend" {
+resource "aws_iam_user_policy_attachment" "attach_policy" {
   user       = aws_iam_user.cd.name
-  policy_arn = aws_iam_policy.tf_backend.arn
+  policy_arn = aws_iam_policy.tf_backend_policy.arn
 }
