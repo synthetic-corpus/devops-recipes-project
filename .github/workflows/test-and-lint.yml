@@ -1,0 +1,28 @@
+name: Test and Lint
+
+on:
+  workflow_call:
+    secrets:
+      DOCKERHUB_USER:
+        required: true
+        description: "User for docker auth"
+      DOCKERHUB_TOKEN:
+        required: true
+        description: "Token, in leiu of a password"
+
+jobs:
+  python:
+    name: Python jobs
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Login to docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Checkout
+        user: action/checkout@v4
+      - name: Test
+        run: docker compuse run --rm app sh -c "python manage.py wait_for_db && python manage.py test"
+      - name: Python flake8
+        run: docker compuse run --rm app sh -c "flake8"
