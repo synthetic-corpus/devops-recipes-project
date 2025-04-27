@@ -1,4 +1,4 @@
-name: Chekcs
+name: Checks
 
 on:
   pull_request:
