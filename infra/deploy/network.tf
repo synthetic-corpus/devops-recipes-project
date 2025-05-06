@@ -25,10 +25,10 @@ resource "aws_internet_gateway" "main" {
 #################################################
 
 resource "aws_subnet" "public_a" {
-  vpc_id                          = aws_vpc.main.id
-  cidr_block                      = "10.1.1.0/24"
-  map_customer_owned_ip_on_launch = true
-  availability_zone               = "${data.aws_region.current.name}a"
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.1.1.0/24"
+  map_public_ip_on_launch = true
+  availability_zone       = "${data.aws_region.current.name}a"
 
   tags = {
     Name = "${local.prefix}-public-subnet-a"
@@ -36,10 +36,10 @@ resource "aws_subnet" "public_a" {
 }
 
 resource "aws_subnet" "public_b" {
-  vpc_id                          = aws_vpc.main.id
-  cidr_block                      = "10.1.2.0/24"
-  map_customer_owned_ip_on_launch = true
-  availability_zone               = "${data.aws_region.current.name}b"
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.1.2.0/24"
+  map_public_ip_on_launch = true
+  availability_zone       = "${data.aws_region.current.name}b"
 
   tags = {
     Name = "${local.prefix}-public-subnet-b"
