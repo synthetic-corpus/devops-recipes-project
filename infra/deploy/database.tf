@@ -36,7 +36,7 @@ resource "aws_db_instance" "main" {
   allocated_storage          = 20    # in gb
   storage_type               = "io1" # "gp2" for simplest
   engine                     = "postgres"
-  engine_version             = "15.3"
+  engine_version             = "15.13"
   auto_minor_version_upgrade = true
   instance_class             = "db.t4g.micro" # "db.t4g.micro" for simplest
   iops                       = 500            # 50x20 = 1000. 1000 would be the max here
