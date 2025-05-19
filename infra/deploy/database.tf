@@ -33,13 +33,13 @@ resource "aws_security_group" "rds" {
 resource "aws_db_instance" "main" {
   identifier                 = "${local.prefix}-db"
   db_name                    = "recipe"
-  allocated_storage          = 100    # in gb. Min size of io1 and postgres
+  allocated_storage          = 100   # in gb. Min size of io1 and postgres
   storage_type               = "io1" # "gp2" for simplest
   engine                     = "postgres"
   engine_version             = "15.13"
   auto_minor_version_upgrade = true
   instance_class             = "db.t4g.micro" # "db.t4g.micro" for simplest
-  iops                       = 2000            # 50x100 = 5000. 5000 would be the max here
+  iops                       = 2000           # 50x100 = 5000. 5000 would be the max here
   username                   = var.db_username
   password                   = var.db_password
   skip_final_snapshot        = true
