@@ -44,6 +44,35 @@ resource "aws_iam_role_policy_attachment" "task_ssm_policy" {
 # do so starting below this block.          #
 #############################################
 
+resource "aws_cloudwatch_log_group" "ecs_task_logs" {
+  name = "${local.prefix}-terra-api"
+}
+
 resource "aws_ecs_cluster" "main" {
   name = "${local.prefix}-cluster"
+}
+
+###############################
+# Actual Tasks related to ECS #
+###############################
+
+resource "aws_ecs_task_definition" "api" {
+  family                   = "${local.prefix}-api"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 256
+  network_mode             = "awsvpc"
+  memory                   = 1048
+  execution_role_arn       = aws_iam_policy.task_execution_role_policy.arn
+  task_role_arn            = aws_iam_role.app_task.arn
+
+  container_definitions = jsondecode([])
+
+  volume {
+    name = "static"
+  }
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64" # must match what the docker is built for!
+  }
 }
