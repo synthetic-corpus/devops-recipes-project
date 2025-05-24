@@ -10,9 +10,7 @@ resource "aws_iam_policy" "task_execution_role_policy" {
 }
 
 resource "aws_iam_role" "task_execution_role" {
-  name               = "${local.prefix}-task-assume-role"
   path               = "/"
-  description        = "Allow ECS to take on any policy whatsoever"
   assume_role_policy = file("./templates/ecs/task-assume-role-policy.json")
 }
 
@@ -20,7 +18,6 @@ resource "aws_iam_role_policy_attachment" "task_execution_role" {
   role       = aws_iam_role.task_execution_role.name
   policy_arn = aws_iam_policy.task_execution_role_policy.arn
 }
-
 
 resource "aws_iam_role" "app_task" {
   name               = "${local.prefix}-app-task"
