@@ -161,3 +161,35 @@ resource "aws_ecs_task_definition" "api" {
     cpu_architecture        = "X86_64" # must match what the docker is built for!
   }
 }
+
+resource "aws_security_group" "ecs_service" {
+  description = "outgoing rules for ECS"
+  name = "${local.prefix}-ecs-service"
+  vpc_id = aws_vpc.main.id
+
+  # Access to end points
+  egress {
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Access to RDS
+  egress {
+    from_port = 5432
+    to_port = 5432
+    protocol = "tcp"
+    cidr_blocks = [
+        aws_subnet.private_a.cidr_block,
+        aws_subnet.private_b.cidr_block
+        ]
+    }
+    # Inbound access from internet
+    ingress {
+        from_port = 8000
+        to_port = 8000
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
