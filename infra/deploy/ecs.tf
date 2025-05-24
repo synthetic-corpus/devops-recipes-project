@@ -59,7 +59,7 @@ resource "aws_ecs_task_definition" "api" {
   cpu                      = 256
   network_mode             = "awsvpc"
   memory                   = 1048
-  execution_role_arn       = aws_iam_policy.task_execution_role_policy.arn
+  execution_role_arn       = aws_iam_role.task_execution_role.arn
   task_role_arn            = aws_iam_role.app_task.arn
 
   container_definitions = jsonencode(
