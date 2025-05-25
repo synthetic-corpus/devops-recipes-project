@@ -189,7 +189,7 @@ resource "aws_security_group" "ecs_service" {
     to_port   = 8000
     protocol  = "tcp"
     cidr_blocks = [
-      aws_security_group.loadbalancer.id
+      aws_security_group.loadbalancer.cidr_block
     ]
   }
 }
