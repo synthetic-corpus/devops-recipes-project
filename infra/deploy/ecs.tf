@@ -182,12 +182,15 @@ resource "aws_security_group" "ecs_service" {
       aws_subnet.private_b.cidr_block
     ]
   }
-  # Inbound access from internet
+
+  # Inbound access from internet via Load balancer
   ingress {
-    from_port   = 8000
-    to_port     = 8000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 8000
+    to_port   = 8000
+    protocol  = "tcp"
+    cidr_blocks = [
+      aws_security_group.loadbalancer.id
+    ]
   }
 }
 
@@ -201,13 +204,18 @@ resource "aws_ecs_service" "api" {
   enable_execute_command = true
 
   network_configuration {
-    assign_public_ip = true # a typical set up will be changed.
 
     subnets = [ # also atypical. Will eventually be behind a load balancer.
-      aws_subnet.public_a.id,
-      aws_subnet.public_b.id
+      aws_subnet.private_a.id,
+      aws_subnet.private_b.id
     ]
 
     security_groups = [aws_security_group.ecs_service.id]
+  }
+
+  load_balancer {
+    target_group_arn = aws_alb_target_group.api.arn
+    container_name   = "terra-proxy"
+    container_port   = 8000
   }
 }
