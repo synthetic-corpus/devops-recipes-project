@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - prod
+      - loadbalancer
 
 jobs:
   test-lint:
