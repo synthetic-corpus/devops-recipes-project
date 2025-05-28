@@ -49,7 +49,7 @@ resource "aws_alb_target_group" "api" {
   port        = 8000
 
   health_check {
-    path = "/api/health-check"
+    path = "/api/health-check/"
   }
 }
 
