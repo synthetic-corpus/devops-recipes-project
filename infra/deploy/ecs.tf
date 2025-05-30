@@ -101,6 +101,11 @@ resource "aws_ecs_task_definition" "api" {
             readOnly      = false
             containerPath = "/vol/web/static"
             sourceVolume  = "static"
+          },
+          {
+            readOnly      = false
+            containerPath = "/vol/web/media"
+            sourceVolume  = "efs-media"
           }
         ],
         logConfiguration = {
@@ -135,6 +140,11 @@ resource "aws_ecs_task_definition" "api" {
             readOnly      = true
             containerPath = "/vol/static"
             sourceVolume  = "static"
+          },
+          {
+            readOnly      = true
+            containerPath = "/vol/web/media"
+            sourceVolume  = "efs-media"
           }
         ]
         logConfiguration = {
